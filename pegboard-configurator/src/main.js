@@ -49,27 +49,20 @@ function listToPaths(objects) {
 const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
 
+const board = new paper.Path.Rectangle(new paper.Point(100, 100), new paper.Size(300, 400));
+const offset = -30;
+const holeArea = PaperOffset.offset(board, offset);
 
 var path = new skadisHole(100, 100);
 var grid = path.createGrid(new paper.Point(530, 620));
 
+const holesTemplate = listToPaths(grid);
 
-const board = new paper.Path.Rectangle(new paper.Point(100, 100), new paper.Size(300, 400));
+const actualHoles = holeArea.intersect(holesTemplate);
 
-const holes = listToPaths(grid);
+const boardWithHoles = board.subtract(actualHoles);
+boardWithHoles.fillColor = 'black';
+paper.project.activeLayer.addChild(boardWithHoles);
 
-
-const offset = -30;
-const offsetBoard = PaperOffset.offset(board, offset);
-//offsetBoard.fillColor = 'red';
-//paper.project.activeLayer.addChild(offsetBoard);
-
-const actualHoles = offsetBoard.intersect(holes);
-
-const actualBoard = board.subtract(actualHoles);
-actualBoard.fillColor = 'black';
-paper.project.activeLayer.addChild(actualBoard);
-
-//path.smooth();
 // Draw the view now
 paper.view.draw();
