@@ -18,8 +18,9 @@ class skadisHole {
   createGrid(numberOfRows, numberOfColumns) {
     for (var i = 0; i < numberOfRows; i++) {
       for (var j = 0; j < numberOfColumns; j++) {
+        const shift = i % 2 == 0 ? 0 : 17.5;
         const tempPath = new paper.Path.Rectangle(
-          new paper.Rectangle(this.x + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight),
+          new paper.Rectangle(this.x + shift + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight),
           this.holeRadius
         );
         tempPath.strokeColor = 'black';
