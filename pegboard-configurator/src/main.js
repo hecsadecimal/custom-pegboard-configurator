@@ -1,4 +1,5 @@
 import paper from 'paper';
+import { PaperOffset } from 'paperjs-offset'
 
 class skadisHole {
   constructor (x, y) {
@@ -15,21 +16,34 @@ class skadisHole {
       this.holeRadius
     );
   }
-  createGrid(numberOfRows, numberOfColumns) {
+  createGrid(endpoint) {
+    var numberOfRows = Math.floor((endpoint.x - this.x) / 40);
+    var numberOfColumns = Math.floor((endpoint.y - this.y) / 40);
+    var holes = [];
     for (var i = 0; i < numberOfRows; i++) {
       for (var j = 0; j < numberOfColumns; j++) {
         const shift = i % 2 == 0 ? 0 : 17.5;
-        const tempPath = new paper.Path.Rectangle(
-          new paper.Rectangle(this.x + shift + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight),
-          this.holeRadius
-        );
-        tempPath.strokeColor = 'black';
-        paper.project.activeLayer.addChild(tempPath);
+        holes.push(new paper.Rectangle(this.x + shift + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight));
       }
     }
+    return holes;
   }
 };
 
+function listToPaths(objects) {
+  const paths = [];
+  objects.forEach(element => {
+    const holeRadius = 5/2;
+    const tempPath = new paper.Path.Rectangle(
+      element,
+      holeRadius
+    );
+    paths.push(tempPath);
+  });
+  return new paper.CompoundPath({ children: paths });
+};
+  
+  
 
 // Setup Paper.js on the canvas
 const canvas = document.getElementById('myCanvas');
@@ -37,7 +51,24 @@ paper.setup(canvas);
 
 
 var path = new skadisHole(100, 100);
-path.createGrid(10, 10);
+var grid = path.createGrid(new paper.Point(530, 620));
+
+
+const board = new paper.Path.Rectangle(new paper.Point(100, 100), new paper.Size(300, 400));
+
+const holes = listToPaths(grid);
+
+
+const offset = -30;
+const offsetBoard = PaperOffset.offset(board, offset);
+//offsetBoard.fillColor = 'red';
+//paper.project.activeLayer.addChild(offsetBoard);
+
+const actualHoles = offsetBoard.intersect(holes);
+
+const actualBoard = board.subtract(actualHoles);
+actualBoard.fillColor = 'black';
+paper.project.activeLayer.addChild(actualBoard);
 
 //path.smooth();
 // Draw the view now
