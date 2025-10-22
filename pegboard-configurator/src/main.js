@@ -91,7 +91,7 @@ paper.setup(canvas);
 let currentWidth = 500;
 let currentHeight = 500;
 let currentPadding = 20;
-let currentCornerRadius = 30;
+let currentCornerRadius = 25;
 // Initial board generation
 generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
 
