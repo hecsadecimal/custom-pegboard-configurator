@@ -6,8 +6,85 @@
   <title>Pegboard Configurator</title>
 </head>
 <body>
-  <canvas id="myCanvas" style="width: 100%; height: 500px;"></canvas>
-  <p>hello</p>
+  <div class="flex-container">
+    <div>
+      <canvas id="myCanvas" class="canvas"></canvas>
+    </div>
+    <div class="sidebar">
+      <div>
+        <input
+          type="range"
+          id="boardWidthSlider"
+          name="boardWidth"
+          min="50"
+          max="1000"
+          value="500"
+          step="10" />
+        <label for="boardWidth">Width</label>
+      </div>
+      <div>
+        <input
+          type="range"
+          id="boardHeightSlider"
+          name="boardHeight"
+          min="50"
+          max="1000"
+          value="500"
+          step="10" />
+        <label for="boardHeight">Height</label>
+      </div>
+      <div>
+        <input
+          type="range"
+          id="paddingSlider"
+          name="padding"
+          min="5"
+          max="100"
+          value="20"
+          step="1" />
+        <label for="padding">Padding</label>
+      </div>
+      <div>
+        <input
+          type="range"
+          id="cornerRadiusSlider"
+          name="cornerRadius"
+          min="0"
+          max="60"
+          value="5"
+          step="1" />
+        <label for="cornerRadius">Corner Radius</label>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
+<style>
+  html,
+  body {
+    height: 90%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .flex-container {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+  }
+
+  .canvas {
+    flex-grow: 3;
+    padding: 20px;
+    border: 1px solid #ccc;
+    height: 100%;
+    width: 80%
+  }
+
+  .sidebar {
+    flex-grow: 1;
+    justify-content: center;
+  }
+</style>
