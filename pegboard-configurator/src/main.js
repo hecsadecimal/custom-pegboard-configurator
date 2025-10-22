@@ -30,8 +30,8 @@ class skadisHole {
 
 function listToPaths(objects) {
   const paths = [];
+  const holeRadius = 5/2;
   objects.forEach(element => {
-    const holeRadius = 5/2;
     const tempPath = new paper.Path.Rectangle(element, holeRadius);
     paths.push(tempPath);
   });
@@ -66,12 +66,12 @@ function generateBoard(width, height, padding, cornerRadius) {
   var grid = path.createGrid(holeArea.segments[3].point);
 
   // Filter holes that intersect with cutLine
-  var grid = grid.filter(hole => !(new paper.Path.Rectangle(hole, 5/2).intersects(cutLine)));
+  grid = grid.filter(hole => !(new paper.Path.Rectangle(hole, 5/2).intersects(cutLine)));
 
   const holesTemplate = listToPaths(grid);
 
   // Center remaining holes
-  const boardCenter = board.bounds.center;
+  const boardCenter = roundedBoard.bounds.center;
   const holePatternCenter = holesTemplate.bounds.center;
   holesTemplate.translate(boardCenter.x - holePatternCenter.x, boardCenter.y - holePatternCenter.y);
 
@@ -91,7 +91,7 @@ paper.setup(canvas);
 let currentWidth = 500;
 let currentHeight = 500;
 let currentPadding = 20;
-let currentCornerRadius = 5;
+let currentCornerRadius = 30;
 // Initial board generation
 generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
 
@@ -100,7 +100,6 @@ const boardWidthSlider = document.getElementById('boardWidthSlider');
 const boardHeightSlider = document.getElementById('boardHeightSlider');
 const paddingSlider = document.getElementById('paddingSlider');
 const cornerRadiusSlider = document.getElementById('cornerRadiusSlider');
-
 
 
 
