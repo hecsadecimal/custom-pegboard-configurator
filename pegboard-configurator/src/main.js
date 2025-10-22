@@ -17,11 +17,8 @@ class skadisHole {
     );
   }
   createGrid(endpoint) {
-    console.log(endpoint);
-    console.log(this.x, this.y);
     var numberOfRows = Math.ceil((endpoint.x - this.x) / 40);
     var numberOfColumns = Math.ceil((endpoint.y - this.y) / 40);
-    console.log(numberOfRows, numberOfColumns);
     var holes = [];
     for (var i = 0; i < numberOfColumns; i++) {
       for (var j = 0; j < numberOfRows; j++) {
@@ -53,7 +50,7 @@ const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
 
 const board = new paper.Path.Rectangle(new paper.Point(100, 100), new paper.Size(300, 400));
-const offset = -30;
+const offset = -20;
 const holeArea = PaperOffset.offset(board, offset);
 holeArea.segments.forEach(segment => {
   segment.point.x = Math.round(segment.point.x);
@@ -73,6 +70,11 @@ var grid = grid.filter(hole => !(new paper.Path.Rectangle(hole, 5/2).intersects(
 
 
 const holesTemplate = listToPaths(grid);
+
+// center remaining holes
+const boardCenter = board.bounds.center;
+const holePatternCenter = holesTemplate.bounds.center;
+holesTemplate.translate(boardCenter.x - holePatternCenter.x, boardCenter.y - holePatternCenter.y);
 
 const actualHoles = holeArea.clone().intersect(holesTemplate);
 
