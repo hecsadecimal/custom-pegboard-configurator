@@ -20,7 +20,7 @@ class skadisHole {
     var holes = [];
     for (var i = 0; i < numberOfColumns; i++) {
       for (var j = 0; j < numberOfRows; j++) {
-        const shift = i % 2 == 0 ? 0 : 17.5;
+        const shift = i % 2 == 0 ? 0 : 20;
         holes.push(new paper.Rectangle(this.x + shift + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight));
       }
     }
@@ -38,9 +38,12 @@ function listToPaths(objects) {
   return new paper.CompoundPath({ children: paths });
 }
 
-function generateBoard(width, height, padding, cornerRadius) {
+function generateBoard(width, height) {
   // Clear the entire canvas
   paper.project.activeLayer.removeChildren();
+
+  const offset = -20;
+  const cornerRadius = 20;
   
   const board = new paper.Path.Rectangle(
     new paper.Point(100, 100), 
@@ -52,7 +55,7 @@ function generateBoard(width, height, padding, cornerRadius) {
     cornerRadius
   )
   
-  const offset = padding * -1;
+  
   const holeArea = PaperOffset.offset(board, offset);
   
   holeArea.segments.forEach(segment => {
@@ -61,26 +64,21 @@ function generateBoard(width, height, padding, cornerRadius) {
   });
 
   const cutLine = PaperOffset.offset(holeArea, 0.001);
+  cutLine.strokeColor = 'red';
 
   var path = new skadisHole(holeArea.segments[1].point);
   var grid = path.createGrid(holeArea.segments[3].point);
 
-  // Filter holes that intersect with cutLine
-  grid = grid.filter(hole => !(new paper.Path.Rectangle(hole, 5/2).intersects(cutLine)));
-
   const holesTemplate = listToPaths(grid);
+  const finalHolesTemplate = new paper.CompoundPath({ children: holesTemplate.children });
 
-  // Center remaining holes
-  const boardCenter = roundedBoard.bounds.center;
-  const holePatternCenter = holesTemplate.bounds.center;
-  holesTemplate.translate(boardCenter.x - holePatternCenter.x, boardCenter.y - holePatternCenter.y);
-
-  const actualHoles = holeArea.clone().intersect(holesTemplate);
+  const actualHoles = holeArea.clone().intersect(finalHolesTemplate);
   const boardWithHoles = roundedBoard.subtract(actualHoles);
   
   boardWithHoles.fillColor = 'black';
   
   paper.project.activeLayer.addChild(boardWithHoles);
+  paper.project.activeLayer.addChild(cutLine);
   paper.view.draw();
 }
 
@@ -88,37 +86,21 @@ function generateBoard(width, height, padding, cornerRadius) {
 const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
 
-let currentWidth = 500;
-let currentHeight = 500;
-let currentPadding = 20;
-let currentCornerRadius = 25;
+let currentWidth = 425;
+let currentHeight = 415;
 // Initial board generation
-generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
+generateBoard(currentWidth, currentHeight);
 
 // Setup sliders
 const boardWidthSlider = document.getElementById('boardWidthSlider');
 const boardHeightSlider = document.getElementById('boardHeightSlider');
-const paddingSlider = document.getElementById('paddingSlider');
-const cornerRadiusSlider = document.getElementById('cornerRadiusSlider');
-
-
 
 boardWidthSlider.addEventListener('input', function() {
   currentWidth = parseFloat(this.value);
-  generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
+  generateBoard(currentWidth, currentHeight);
 });
 
 boardHeightSlider.addEventListener('input', function() {
   currentHeight = parseFloat(this.value);
-  generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
-});
-
-paddingSlider.addEventListener('input', function() {
-  currentPadding = parseFloat(this.value);
-  generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
-});
-
-cornerRadiusSlider.addEventListener('input', function() {
-  currentCornerRadius = parseFloat(this.value);
-  generateBoard(currentWidth, currentHeight, currentPadding, currentCornerRadius);
+  generateBoard(currentWidth, currentHeight);
 });
