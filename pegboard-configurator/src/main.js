@@ -44,14 +44,16 @@ function generateBoard(width, height) {
 
   const offset = -20;
   const cornerRadius = 20;
+
+  const middlePoint = new paper.Point(380, 380);
   
   const board = new paper.Path.Rectangle(
-    new paper.Point(100, 100), 
+    new paper.Point(middlePoint.x - width / 2, middlePoint.y - height / 2),
     new paper.Size(width, height)
   );
 
   const roundedBoard = new paper.Path.Rectangle(
-    new paper.Rectangle(100, 100, width, height),
+    new paper.Rectangle(middlePoint.x - width / 2, middlePoint.y - height / 2, width, height),
     cornerRadius
   )
   
@@ -63,7 +65,7 @@ function generateBoard(width, height) {
     segment.point.y = Math.round(segment.point.y);
   });
 
-  const cutLine = PaperOffset.offset(holeArea, 0.001);
+  //const cutLine = PaperOffset.offset(holeArea, 0.001);
   //cutLine.strokeColor = 'red';
 
   var path = new skadisHole(holeArea.segments[1].point);
@@ -78,13 +80,13 @@ function generateBoard(width, height) {
   boardWithHoles.fillColor = '#F0EBD8';
   
   paper.project.activeLayer.addChild(boardWithHoles);
-  //paper.project.activeLayer.addChild(cutLine);
   paper.view.draw();
 }
 
 // Setup Paper.js on the canvas
 const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
+console.log(canvas.width);
 
 let currentWidth = 425;
 let currentHeight = 415;
