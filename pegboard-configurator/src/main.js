@@ -64,7 +64,7 @@ function generateBoard(width, height) {
   });
 
   const cutLine = PaperOffset.offset(holeArea, 0.001);
-  cutLine.strokeColor = 'red';
+  //cutLine.strokeColor = 'red';
 
   var path = new skadisHole(holeArea.segments[1].point);
   var grid = path.createGrid(holeArea.segments[3].point);
@@ -75,10 +75,10 @@ function generateBoard(width, height) {
   const actualHoles = holeArea.clone().intersect(finalHolesTemplate);
   const boardWithHoles = roundedBoard.subtract(actualHoles);
   
-  boardWithHoles.fillColor = 'black';
+  boardWithHoles.fillColor = '#F0EBD8';
   
   paper.project.activeLayer.addChild(boardWithHoles);
-  paper.project.activeLayer.addChild(cutLine);
+  //paper.project.activeLayer.addChild(cutLine);
   paper.view.draw();
 }
 
@@ -94,13 +94,17 @@ generateBoard(currentWidth, currentHeight);
 // Setup sliders
 const boardWidthSlider = document.getElementById('boardWidthSlider');
 const boardHeightSlider = document.getElementById('boardHeightSlider');
+const widthValue = document.querySelector("#widthValue");
+const heightValue = document.querySelector("#heightValue");
 
 boardWidthSlider.addEventListener('input', function() {
   currentWidth = parseFloat(this.value);
+  widthValue.textContent = currentWidth;
   generateBoard(currentWidth, currentHeight);
 });
 
 boardHeightSlider.addEventListener('input', function() {
   currentHeight = parseFloat(this.value);
+  heightValue.textContent = currentHeight;
   generateBoard(currentWidth, currentHeight);
 });

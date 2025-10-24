@@ -11,7 +11,8 @@
       <canvas id="myCanvas" class="canvas"></canvas>
     </div>
     <div class="sidebar">
-      <div>
+      <div class="slider">
+        <p>Width</p>
         <input
           type="range"
           id="boardWidthSlider"
@@ -20,9 +21,10 @@
           max="1000"
           value="425"
           step="20" />
-        <label for="boardWidth">Width</label>
+        <p id="widthValue">425</p>
       </div>
-      <div>
+      <div class="slider">
+        <p>Height</p>
         <input
           type="range"
           id="boardHeightSlider"
@@ -31,7 +33,7 @@
           max="1000"
           value="415"
           step="40" />
-        <label for="boardHeight">Height</label>
+        <p id="heightValue">415</p>
       </div>
     </div>
   </div>
@@ -42,27 +44,41 @@
 <style>
   html,
   body {
-    height: 90%;
+    height: 99%;
     margin: 0;
     padding: 0;
+    background-color: #1D2D44;
   }
 
   .flex-container {
     display: flex;
-    justify-content: space-around;
     height: 100%;
+    width: 100%;
   }
 
   .canvas {
-    flex-grow: 3;
     padding: 20px;
-    border: 1px solid #ccc;
-    height: 100%;
-    width: 80%
+    border: 10px solid #1D2D44;
+    height: 90%;
+    width: 80%;
+    background-color: #748CAB;
   }
 
   .sidebar {
-    flex-grow: 1;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 5%;
+    min-width: 20%;
+    height: 100%;
+    border: solid #1D2D44;
+    background-color: #3E5C76;
+  }
+
+  .slider {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    color: #F0EBD8;
+    accent-color: #1D2D44;
   }
 </style>
