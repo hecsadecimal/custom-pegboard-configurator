@@ -16,12 +16,12 @@ class skadisHole {
   }
   createGrid(endpoint) {
     var numberOfRows = Math.ceil((endpoint.x - this.x) / 40);
-    var numberOfColumns = Math.ceil((endpoint.y - this.y) / 40);
+    var numberOfColumns = Math.ceil((endpoint.y - this.y) / 20);
     var holes = [];
     for (var i = 0; i < numberOfColumns; i++) {
       for (var j = 0; j < numberOfRows; j++) {
         const shift = i % 2 == 0 ? 0 : 20;
-        holes.push(new paper.Rectangle(this.x + shift + 40 * j, this.y + 40 * i, this.holeWidth, this.holeHeight));
+        holes.push(new paper.Rectangle(this.x + shift + 40 * j, this.y + 20 * i, this.holeWidth, this.holeHeight));
       }
     }
     return holes;
