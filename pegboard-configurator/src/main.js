@@ -57,16 +57,7 @@ function generateBoard(width, height) {
     cornerRadius
   )
   
-  
   const holeArea = PaperOffset.offset(board, offset);
-  
-  holeArea.segments.forEach(segment => {
-    segment.point.x = Math.round(segment.point.x);
-    segment.point.y = Math.round(segment.point.y);
-  });
-
-  //const cutLine = PaperOffset.offset(holeArea, 0.001);
-  //cutLine.strokeColor = 'red';
 
   var path = new skadisHole(holeArea.segments[1].point);
   var grid = path.createGrid(holeArea.segments[3].point);
