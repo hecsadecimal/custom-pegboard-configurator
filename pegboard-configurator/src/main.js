@@ -83,10 +83,32 @@ function generateBoard(width, height) {
   paper.view.draw();
 }
 
+function generatePreview(width, height) {
+  previewLayer.activate();
+  previewLayer.children.pop();
+
+  const middlePoint = new paper.Point(380, 380);
+  const roundedBoard = new paper.Path.Rectangle(
+    new paper.Rectangle(middlePoint.x - width / 2, middlePoint.y - height / 2, width, height),
+    20
+  );
+  roundedBoard.style = {
+    strokeColor: '#E4572E',
+    dashArray: [4, 10],
+    strokeWidth: 4,
+    strokeCap: 'round'
+};
+
+  previewLayer.addChild(roundedBoard);
+}
+
 // Setup Paper.js on the canvas
 const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
-console.log(canvas.width);
+
+var boardLayer = new paper.Layer();
+var previewLayer = new paper.Layer();
+boardLayer.activate();
 
 let currentWidth = 425;
 let currentHeight = 415;
@@ -99,14 +121,30 @@ const boardHeightSlider = document.getElementById('boardHeightSlider');
 const widthValue = document.querySelector("#widthValue");
 const heightValue = document.querySelector("#heightValue");
 
-boardWidthSlider.addEventListener('input', function() {
+boardWidthSlider.addEventListener('change', function() {
+  boardLayer.activate();
   currentWidth = parseFloat(this.value);
   widthValue.textContent = currentWidth;
   generateBoard(currentWidth, currentHeight);
+  previewLayer.removeChildren();
+});
+
+boardWidthSlider.addEventListener('input', function() {
+  currentWidth = parseFloat(this.value);
+  widthValue.textContent = currentWidth;
+  generatePreview(currentWidth, currentHeight);
+});
+
+boardHeightSlider.addEventListener('change', function() {
+  boardLayer.activate();
+  currentHeight = parseFloat(this.value);
+  heightValue.textContent = currentHeight;
+  generateBoard(currentWidth, currentHeight);
+  previewLayer.removeChildren();
 });
 
 boardHeightSlider.addEventListener('input', function() {
   currentHeight = parseFloat(this.value);
   heightValue.textContent = currentHeight;
-  generateBoard(currentWidth, currentHeight);
+  generatePreview(currentWidth, currentHeight);
 });
