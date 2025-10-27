@@ -1,5 +1,6 @@
 import paper from 'paper';
 import { PaperOffset } from 'paperjs-offset'
+import { applyTranslations, getCurrentLang, toggleLang } from './translations.js';
 
 class skadisHole {
   constructor (point) {
@@ -92,6 +93,17 @@ function generatePreview(width, height) {
 
   previewLayer.addChild(roundedBoard);
 }
+
+
+applyTranslations(getCurrentLang());
+var langButton = document.getElementById("languageToggleButton");
+langButton.addEventListener('click', () => {
+    const newLang = toggleLang();
+    applyTranslations(newLang); // Apply the new translations
+
+    // Update the button text
+    langButton.textContent = newLang === 'en' ? 'Deutsch' : 'English';
+});
 
 // Setup Paper.js on the canvas
 const canvas = document.getElementById('myCanvas');
