@@ -115,9 +115,12 @@ const heightValue = document.querySelector("#heightValue");
 boardWidthSlider.addEventListener('change', function() {
   boardLayer.activate();
   currentWidth = parseFloat(this.value);
+  if (currentWidth < 45) {
+    currentWidth = 45;
+    boardWidthSlider.value = 45;
+  }
   widthValue.textContent = currentWidth;
   generateBoard(currentWidth, currentHeight);
-  previewLayer.removeChildren();
 });
 
 boardWidthSlider.addEventListener('input', function() {
@@ -126,9 +129,17 @@ boardWidthSlider.addEventListener('input', function() {
   generatePreview(currentWidth, currentHeight);
 });
 
+boardWidthSlider.addEventListener('mouseup', function() {
+  previewLayer.removeChildren();
+});
+
 boardHeightSlider.addEventListener('change', function() {
   boardLayer.activate();
   currentHeight = parseFloat(this.value);
+  if (currentHeight < 55) {
+    currentHeight = 55;
+    boardHeightSlider.value = 55;
+  }
   heightValue.textContent = currentHeight;
   generateBoard(currentWidth, currentHeight);
   previewLayer.removeChildren();
@@ -138,4 +149,8 @@ boardHeightSlider.addEventListener('input', function() {
   currentHeight = parseFloat(this.value);
   heightValue.textContent = currentHeight;
   generatePreview(currentWidth, currentHeight);
+});
+
+boardHeightSlider.addEventListener('mouseup', function() {
+  previewLayer.removeChildren();
 });
