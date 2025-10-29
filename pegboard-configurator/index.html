@@ -6,13 +6,23 @@
   <title>Pegboard Configurator</title>
 </head>
 <body>
+  <div class="header">
+    <div class="header_left">
+      <img src="dead_herring_bold.png" id="dead_herring">
+      <h1 id="header">Pegboard Configurator</h1>
+    </div>
+    
+    <div class="languageSelectors">
+      <img src="uk_flag.svg" id="ukFlag" class="flagIcon">
+      <img src="german_flag.svg" id="germanFlag" class="flagIcon">
+    </div>
+  </div>
   <div class="flex-container">
     <div>
       <canvas id="myCanvas" class="canvas"></canvas>
     </div>
     <div class="sidebar">
       <div class="sidebar-contents">
-        <button id="languageToggleButton">Deutsch</button>
         <div class="slider">
           <p id="widthSliderLabel">Width</p>
           <input
@@ -47,10 +57,11 @@
 <style>
   html,
   body {
-    height: 99%;
+    height: 90%;
     margin: 0;
     padding: 0;
     background-color: #1D2D44;
+    font-family: "Trebuchet MS";
   }
 
   .flex-container {
@@ -62,10 +73,11 @@
   .canvas {
     padding: 20px;
     border: 10px solid #1D2D44;
-    height: 85%;
+    height: 94%;
     width: 80%;
     background-color: #3e5c76;
     border-radius: 50px;
+    margin-left: 40px;
   }
 
   .sidebar {
@@ -93,4 +105,33 @@
     color: #F0EBD8;
     accent-color: #1D2D44;
   }
+
+  .header {
+    display: flex;
+    height: 7%;
+    align-items: center;
+    justify-content: space-between;
+    color: #F0EBD8;
+    margin: 20px 0 10px 5%;
+  }
+
+  .header_left {
+    display: flex;
+    min-width: 50%;
+  }
+
+  .flagIcon {
+    width: 40px;
+  }
+
+  .languageSelectors {
+    margin-right: 3%;
+  }
+
+  #dead_herring {
+    color: white;
+    object-fit: contain;
+    margin-right: 2%;
+  }
+
 </style>

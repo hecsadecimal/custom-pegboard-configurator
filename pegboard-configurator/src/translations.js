@@ -1,11 +1,13 @@
 export const translations = {
   en: {
     pageTitle: "Pegboard Configurator",
+    header: "Pegboard Configurator",
     widthSliderLabel: "Width",
     heightSliderLabel: "Height",
   },
   de: {
     pageTitle: "Lochplattenkonfigurator",
+    header: "Lochplattenkonfigurator",
     widthSliderLabel: "Breite",
     heightSliderLabel: "Höhe",
   },
@@ -32,6 +34,9 @@ export function applyTranslations(lang) {
     const heightLabel = document.getElementById('heightSliderLabel'); // Assuming this is the Height label
     if (heightLabel) heightLabel.textContent = t.heightSliderLabel;
 
+    const header = document.getElementById("header");
+    if (header) header.textContent = t.header;
+
     // Update the page title
     document.title = t.pageTitle;
 
@@ -42,10 +47,5 @@ export function applyTranslations(lang) {
 let currentLang = 'en';
 
 export function getCurrentLang() {
-    return currentLang;
-}
-
-export function toggleLang() {
-    currentLang = currentLang === 'en' ? 'de' : 'en';
     return currentLang;
 }
