@@ -46,7 +46,7 @@ function generateBoard(width, height) {
   const offset = -20;
   const cornerRadius = 20;
 
-  const middlePoint = new paper.Point(395, 388);
+  const middlePoint = paper.view.center;
   
   const board = new paper.Path.Rectangle(
     new paper.Point(middlePoint.x - width / 2, middlePoint.y - height / 2),
@@ -79,7 +79,7 @@ function generatePreview(width, height) {
   previewLayer.activate();
   previewLayer.children.pop();
 
-  const middlePoint = new paper.Point(395, 388);
+  const middlePoint = paper.view.center;
   const roundedBoard = new paper.Path.Rectangle(
     new paper.Rectangle(middlePoint.x - width / 2, middlePoint.y - height / 2, width, height),
     20
