@@ -94,6 +94,68 @@ function generatePreview(width, height) {
   previewLayer.addChild(roundedBoard);
 }
 
+function downloadSVG() {
+  // 1. Find the layer containing the final, correct board geometry.
+  const boardLayer = paper.project.layers.find(layer => layer.name === 'boardLayer');
+  if (!boardLayer || !boardLayer.firstChild) {
+    console.error("Board path not found. Ensure layers are named and the board is generated.");
+    return;
+  }
+  
+  // Get the content bounds to set the viewBox
+  const bounds = boardLayer.bounds;
+  const viewBoxValue = `${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}`;
+
+  // 2. Export the entire board layer's content. This returns the <g> element as a string.
+  let contentString = boardLayer.exportSVG({ 
+    asString: true, 
+    bounds: 'content',
+    // We remove redundant attributes from the <g> that will be placed on the <svg> tag
+    matchShapes: true // Important for path data integrity
+  });
+  
+  // 3. *** Apply Laser-Cut Styling to the Content ***
+  // Ensure all paths are set for cutting (no fill, red stroke, thin width)
+  contentString = contentString.replace(/fill="[^"]*"/g, 'fill="none"');
+  contentString = contentString.replace(/stroke="[^"]*"/g, 'stroke="#000000"'); 
+  contentString = contentString.replace(/stroke-width="[^"]*"/g, 'stroke-width="0.25"');
+
+  // 4. *** WRAP THE CONTENT IN A VALID <SVG> ROOT TAG ***
+  const svgWrapper = 
+  `<svg 
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="${viewBoxValue}"
+    width="${bounds.width}"
+    height="${bounds.height}">
+    ${contentString}
+  </svg>`;
+
+  // 5. *** ADD XML HEADER ***
+  const xmlHeader = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n';
+  const finalSvgString = xmlHeader + svgWrapper;
+  
+  // 6. Create a Blob and initiate the download
+  const blob = new Blob([finalSvgString], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'skadis_board_cut_file.svg'; 
+  
+  document.body.appendChild(a);
+  a.click();
+  
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  console.log("SVG download initiated with valid structure.");
+}
+
+
+
+// Add event listener for download button (add this near your other event listeners)
+const downloadButton = document.getElementById('downloadButton');
+downloadButton.addEventListener('click', downloadSVG);
 
 applyTranslations(getCurrentLang());
 var enButton = document.getElementById("ukFlag");
@@ -113,8 +175,8 @@ deButton.addEventListener('click', () => {
 const canvas = document.getElementById('myCanvas');
 paper.setup(canvas);
 
-var boardLayer = new paper.Layer();
-var previewLayer = new paper.Layer();
+var boardLayer = new paper.Layer({ name: 'boardLayer' });
+var previewLayer = new paper.Layer({ name: 'previewLayer' });
 boardLayer.activate();
 
 let currentWidth = 425;
