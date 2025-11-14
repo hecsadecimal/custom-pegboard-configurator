@@ -69,6 +69,14 @@ function generateBoard(width, height) {
   const actualHoles = holeArea.clone().intersect(finalHolesTemplate);
   const boardWithHoles = roundedBoard.subtract(actualHoles);
   
+  // IMPORTANT: Remove all intermediate paths before adding final result
+  board.remove();
+  holeArea.remove();
+  holesTemplate.remove();
+  finalHolesTemplate.remove();
+  actualHoles.remove();
+  // Don't remove roundedBoard as it was consumed by subtract()
+  
   boardWithHoles.fillColor = '#F0EBD8';
   
   paper.project.activeLayer.addChild(boardWithHoles);
@@ -102,6 +110,8 @@ function downloadSVG() {
     return;
   }
   
+  boardLayer.removeChildren(0, boardLayer.children.length - 1);
+
   // Get the content bounds to set the viewBox
   const bounds = boardLayer.bounds;
   const viewBoxValue = `${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}`;
