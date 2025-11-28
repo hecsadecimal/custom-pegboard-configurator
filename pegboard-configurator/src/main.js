@@ -44,7 +44,7 @@ function generateBoard(width, height) {
   paper.project.activeLayer.removeChildren();
 
   const offset = -20;
-  const cornerRadius = 20;
+  const cornerRadius = 10;
 
   const middlePoint = paper.view.center;
   
