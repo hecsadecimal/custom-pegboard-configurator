@@ -4,12 +4,14 @@ export const translations = {
     header: "Pegboard Configurator",
     widthSliderLabel: "Width",
     heightSliderLabel: "Height",
+    downloadButton: "Download SVG",
   },
   de: {
     pageTitle: "Lochplattenkonfigurator",
     header: "Lochplattenkonfigurator",
     widthSliderLabel: "Breite",
     heightSliderLabel: "Höhe",
+    downloadButton: "SVG herunterladen",
   },
 };
 
@@ -36,6 +38,9 @@ export function applyTranslations(lang) {
 
     const header = document.getElementById("header");
     if (header) header.textContent = t.header;
+
+    const downloadButton = document.getElementById('downloadButton');
+    if (downloadButton) downloadButton.textContent = t.downloadButton;
 
     // Update the page title
     document.title = t.pageTitle;
