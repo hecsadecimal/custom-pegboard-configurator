@@ -15,13 +15,12 @@ class skadisHole {
       this.holeRadius
     );
   }
-  createGrid(endpoint) {
-    var numberOfRows = Math.ceil((endpoint.x - this.x) / 40);
-    var numberOfColumns = Math.ceil((endpoint.y - this.y) / 20);
+  createGrid(width, height) {
     var holes = [];
-    for (var i = 0; i < numberOfColumns; i++) {
-      for (var j = 0; j < numberOfRows; j++) {
-        const shift = i % 2 == 0 ? 0 : 20;
+    for (var i = 0; i < height; i++) {
+      var dynamicWidth = i % 2 == 0 ? width-1 : width;
+      for (var j = 0; j < dynamicWidth; j++) {
+        const shift = i % 2 == 0 ? 20 : 0;
         holes.push(new paper.Rectangle(this.x + shift + 40 * j, this.y + 20 * i, this.holeWidth, this.holeHeight));
       }
     }
@@ -39,9 +38,12 @@ function listToPaths(objects) {
   return new paper.CompoundPath({ children: paths });
 }
 
-function generateBoard(width, height) {
+function generateBoard(numberOfColumns, numberOfRows) {
   // Clear the entire canvas
   paper.project.activeLayer.removeChildren();
+
+  let width = numberOfColumns * 40;
+  let height = numberOfRows * 20;
 
   const offset = -20;
   const cornerRadius = 10;
@@ -54,14 +56,15 @@ function generateBoard(width, height) {
   );
 
   const roundedBoard = new paper.Path.Rectangle(
-    new paper.Rectangle(middlePoint.x - width / 2, middlePoint.y - height / 2, width, height),
+    new paper.Rectangle(middlePoint.x - (width + 35) / 2, middlePoint.y - (height + 25) / 2, width, height + 25),
     cornerRadius
   )
   
-  const holeArea = PaperOffset.offset(board, offset);
+  //const holeArea = PaperOffset.offset(board, offset);
+  const holeArea = new paper.Path.Rectangle(middlePoint.x - width / 2, middlePoint.y - height / 2, width, height);
 
   var path = new skadisHole(holeArea.segments[1].point);
-  var grid = path.createGrid(holeArea.segments[3].point);
+  var grid = path.createGrid(numberOfColumns, numberOfRows);
 
   const holesTemplate = listToPaths(grid);
   const finalHolesTemplate = new paper.CompoundPath({ children: holesTemplate.children });
@@ -189,8 +192,8 @@ var boardLayer = new paper.Layer({ name: 'boardLayer' });
 var previewLayer = new paper.Layer({ name: 'previewLayer' });
 boardLayer.activate();
 
-let currentWidth = 425;
-let currentHeight = 415;
+let currentWidth = 6;
+let currentHeight = 5;
 // Initial board generation
 generateBoard(currentWidth, currentHeight);
 
@@ -203,10 +206,6 @@ const heightValue = document.querySelector("#heightValue");
 boardWidthSlider.addEventListener('change', function() {
   boardLayer.activate();
   currentWidth = parseFloat(this.value);
-  if (currentWidth < 45) {
-    currentWidth = 45;
-    boardWidthSlider.value = 45;
-  }
   widthValue.textContent = currentWidth;
   generateBoard(currentWidth, currentHeight);
 });
@@ -224,10 +223,6 @@ boardWidthSlider.addEventListener('mouseup', function() {
 boardHeightSlider.addEventListener('change', function() {
   boardLayer.activate();
   currentHeight = parseFloat(this.value);
-  if (currentHeight < 55) {
-    currentHeight = 55;
-    boardHeightSlider.value = 55;
-  }
   heightValue.textContent = currentHeight;
   generateBoard(currentWidth, currentHeight);
   previewLayer.removeChildren();
